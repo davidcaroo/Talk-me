@@ -98,17 +98,10 @@ class AudioRecorder(QObject):
         Returns:
             np.ndarray: Concatenated float32 audio buffer.
         """
+        stream_to_close = None
         with self._lock:
-            if self._stream is not None:
-                try:
-                    if hasattr(self._stream, "active") and self._stream.active:
-                        self._stream.stop()
-                    self._stream.close()
-                except Exception as e:
-                    logger.warning(f"Error closing audio stream: {e}")
-                finally:
-                    self._stream = None
-
+            stream_to_close = self._stream
+            self._stream = None
             self._is_recording = False
             self._speech_active = False
             self.vad.reset()
@@ -118,6 +111,14 @@ class AudioRecorder(QObject):
                 self._buffer.clear()
             else:
                 recorded_audio = np.zeros(0, dtype=np.float32)
+
+        if stream_to_close is not None:
+            try:
+                if hasattr(stream_to_close, "active") and stream_to_close.active:
+                    stream_to_close.stop()
+                stream_to_close.close()
+            except Exception as e:
+                logger.warning(f"Error closing audio stream: {e}")
 
         logger.info(f"Audio recording stopped, captured {len(recorded_audio)} samples")
         return recorded_audio
