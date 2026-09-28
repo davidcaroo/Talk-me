@@ -23,6 +23,7 @@ SolidCompression=yes
 WizardStyle=modern
 CloseApplications=yes
 RestartApplications=no
+AppMutex=Global\VoiceDictation_SingleInstance_Mutex,VoiceDictation_SingleInstance_Mutex
 ArchitecturesInstallIn64BitMode=x64compatible
 PrivilegesRequiredOverridesAllowed=dialog
 
@@ -49,3 +50,23 @@ Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChang
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\assets"
 Type: filesandordirs; Name: "{app}"
+
+[Code]
+function InitializeSetup(): Boolean;
+var
+  ErrorCode: Integer;
+begin
+  // Terminate any running VoiceDictation instance so files can be overwritten cleanly
+  ShellExec('open', 'taskkill.exe', '/f /im VoiceDictation.exe', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+  Result := True;
+end;
+
+function InitializeUninstall(): Boolean;
+var
+  ErrorCode: Integer;
+begin
+  // Terminate any running VoiceDictation instance before uninstallation
+  ShellExec('open', 'taskkill.exe', '/f /im VoiceDictation.exe', '', SW_HIDE, ewWaitUntilTerminated, ErrorCode);
+  Result := True;
+end;
+
