@@ -170,7 +170,7 @@ def test_transcription_worker_uncached_lifecycle(qapp):
     # Run synchronously in test
     worker.run()
 
-    assert "Preparando motor de dictado..." in statuses
+    assert "Descargando modelo de voz (única vez)..." in statuses
     assert "Transcribiendo..." in statuses
     assert len(results) == 1
     assert results[0] == expected_result
