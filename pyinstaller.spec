@@ -13,7 +13,7 @@ from PyInstaller.utils.hooks import collect_dynamic_libs, collect_data_files
 
 block_cipher = None
 
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+BASE_DIR = os.path.abspath(SPECPATH if 'SPECPATH' in locals() else os.getcwd())
 
 # Data files: include assets/ (icons, sounds, etc.)
 # NOTE: Whisper models are intentionally NOT bundled here. They are downloaded
