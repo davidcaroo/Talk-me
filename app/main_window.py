@@ -43,7 +43,7 @@ class MainWindow(QObject):
         self._audio_recorder = audio_recorder or AudioRecorder()
         self._clipboard = clipboard or Clipboard()
         self._paster = paster or Paster()
-        self._model_manager = model_manager
+        self._model_manager = model_manager or ModelManager()
 
         # Session Controller
         self._controller = controller or DictationController(
@@ -109,6 +109,9 @@ class MainWindow(QObject):
         """Starts the application services and system tray."""
         logger.info("Starting Voice Dictation application...")
 
+        # Pre-warm Whisper model in background
+        self._start_model_warmup()
+
         # Show tray icon
         self._tray.show()
 
@@ -122,6 +125,12 @@ class MainWindow(QObject):
             success, msg = self._hotkey_manager.register_hotkey(hotkey)
             if not success:
                 logger.warning(f"Could not register startup hotkey '{hotkey}': {msg}")
+
+    def _start_model_warmup(self) -> None:
+        """Triggers background pre-warming of the configured Whisper model."""
+        if self._model_manager is not None:
+            model_name = self._config_manager.get_model_name()
+            self._model_manager.preload_model_async(model_name=model_name)
 
     def show_first_run(self) -> None:
         """Displays the first-run onboarding dialog."""

@@ -1,5 +1,6 @@
 """Model manager for faster-whisper local models with lazy caching."""
 
+import threading
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 from utils.paths import get_models_dir
@@ -138,3 +139,39 @@ class ModelManager:
         self._loaded_models[cache_key] = model
         logger.info(f"Modelo Whisper '{model_name}' cargado exitosamente.")
         return model
+
+    def preload_model_async(
+        self,
+        model_name: str = "base",
+        device: str = "cpu",
+        compute_type: str = "int8",
+        cpu_threads: int = 4,
+    ) -> threading.Thread:
+        """Asynchronously pre-warms a cached Whisper model in background RAM.
+
+        Runs on a daemon thread to avoid blocking application startup or GUI events.
+
+        Returns:
+            The started Thread instance.
+        """
+        def _warmup_target():
+            try:
+                self.clean_stale_locks()
+                if self.is_model_cached(model_name):
+                    logger.info(f"Iniciando precalentamiento de modelo Whisper '{model_name}' en RAM...")
+                    self.load_model(
+                        model_name=model_name,
+                        device=device,
+                        compute_type=compute_type,
+                        cpu_threads=cpu_threads,
+                    )
+                    logger.info(f"Precalentamiento exitoso: modelo '{model_name}' listo en memoria.")
+                else:
+                    logger.info(f"Precalentamiento omitido: modelo '{model_name}' no se encuentra aún en caché.")
+            except Exception as e:
+                logger.warning(f"Error durante el precalentamiento del modelo '{model_name}': {e}")
+
+        warmup_thread = threading.Thread(target=_warmup_target, daemon=True, name="ModelWarmupThread")
+        warmup_thread.start()
+        return warmup_thread
+
