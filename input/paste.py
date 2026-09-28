@@ -12,7 +12,10 @@ import ctypes
 logger = logging.getLogger(__name__)
 
 # Virtual-Key Codes and Constants
+VK_SHIFT = 0x10
 VK_CONTROL = 0x11
+VK_MENU = 0x12  # Alt
+VK_SPACE = 0x20
 VK_V = 0x56
 KEYEVENTF_KEYUP = 0x0002
 INPUT_KEYBOARD = 1
@@ -63,6 +66,35 @@ class INPUT(ctypes.Structure):
         ("type", ctypes.c_ulong),
         ("union", _INPUT_UNION),
     ]
+
+
+def _release_modifier_keys() -> None:
+    """Ensures modifiers (Space, Shift, Menu, Control) are released before pasting."""
+    if sys.platform != "win32":
+        return
+
+    try:
+        inputs = (INPUT * 4)(
+            INPUT(
+                type=INPUT_KEYBOARD,
+                union=_INPUT_UNION(ki=KEYBDINPUT(wVk=VK_SPACE, wScan=0, dwFlags=KEYEVENTF_KEYUP, time=0, dwExtraInfo=0)),
+            ),
+            INPUT(
+                type=INPUT_KEYBOARD,
+                union=_INPUT_UNION(ki=KEYBDINPUT(wVk=VK_SHIFT, wScan=0, dwFlags=KEYEVENTF_KEYUP, time=0, dwExtraInfo=0)),
+            ),
+            INPUT(
+                type=INPUT_KEYBOARD,
+                union=_INPUT_UNION(ki=KEYBDINPUT(wVk=VK_MENU, wScan=0, dwFlags=KEYEVENTF_KEYUP, time=0, dwExtraInfo=0)),
+            ),
+            INPUT(
+                type=INPUT_KEYBOARD,
+                union=_INPUT_UNION(ki=KEYBDINPUT(wVk=VK_CONTROL, wScan=0, dwFlags=KEYEVENTF_KEYUP, time=0, dwExtraInfo=0)),
+            ),
+        )
+        ctypes.windll.user32.SendInput(len(inputs), inputs, ctypes.sizeof(INPUT))
+    except Exception as e:
+        logger.debug(f"Could not release modifier keys: {e}")
 
 
 def _send_input_paste() -> bool:
@@ -127,19 +159,22 @@ class Paster:
     """Automates pasting from clipboard into the currently active application window."""
 
     @staticmethod
-    def paste_clipboard(delay_ms: int = 40) -> bool:
+    def paste_clipboard(delay_ms: int = 80) -> bool:
         """Simulates Ctrl + V in the active window.
 
         Args:
             delay_ms: Stabilization pause in milliseconds before sending the keystrokes
-                      to allow the target application window to maintain/stabilize focus.
-                      Defaults to 40 ms.
+                      to allow the target application window to maintain/stabilize focus
+                      and ensure physical modifier keys are released. Defaults to 80 ms.
 
         Returns:
             True if paste event was successfully triggered, False otherwise.
         """
         if delay_ms > 0:
             time.sleep(delay_ms / 1000.0)
+
+        # Release any physical modifiers before sending keystrokes
+        _release_modifier_keys()
 
         # Primary implementation: Win32 SendInput
         if sys.platform == "win32":
