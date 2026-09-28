@@ -138,6 +138,10 @@ class MainWindow(QObject):
     def _on_first_run_finished(self) -> None:
         """Handles completion of onboarding wizard."""
         hotkey = self._config_manager.get_hotkey()
+        if not self._hotkey_manager.is_registered():
+            success, msg = self._hotkey_manager.register_hotkey(hotkey)
+            if not success:
+                logger.warning(f"Could not register hotkey after onboarding: {msg}")
         self._tray.update_hotkey_text(hotkey)
         self._overlay.apply_config_settings()
 
