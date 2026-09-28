@@ -59,6 +59,8 @@ hiddenimports = [
     'speech',
     'utils',
     'workers',
+    'jaraco',
+    'jaraco.text',
 ]
 
 # Excluded bloated libraries to ensure maximum lightness
@@ -77,6 +79,8 @@ excludes = [
     'xmlrpc',
     'pip',
     'setuptools',
+    'pkg_resources',
+    'torch',
 ]
 
 a = Analysis(
