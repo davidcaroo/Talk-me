@@ -22,8 +22,42 @@ class ModelManager:
         """Clears the in-memory loaded models cache."""
         cls._loaded_models.clear()
 
+    def clean_stale_locks(self) -> int:
+        """Removes orphaned .lock and .incomplete files from interrupted downloads.
+
+        Returns:
+            Number of removed files.
+        """
+        removed_count = 0
+        try:
+            # 1. Purge .locks directory files
+            locks_dir = self.models_dir / ".locks"
+            if locks_dir.exists():
+                for lock_file in locks_dir.rglob("*.lock"):
+                    try:
+                        lock_file.unlink(missing_ok=True)
+                        removed_count += 1
+                    except Exception as e:
+                        logger.debug(f"Could not remove lock file {lock_file}: {e}")
+
+            # 2. Purge .incomplete blob files
+            for incomplete_file in self.models_dir.rglob("*.incomplete"):
+                try:
+                    incomplete_file.unlink(missing_ok=True)
+                    removed_count += 1
+                except Exception as e:
+                    logger.debug(f"Could not remove incomplete file {incomplete_file}: {e}")
+
+            if removed_count > 0:
+                logger.info(f"Limpieza de caché: eliminados {removed_count} archivos residuales/bloqueos.")
+        except Exception as e:
+            logger.warning(f"Error limpiando bloqueos de modelos: {e}")
+        return removed_count
+
     def is_model_cached(self, model_name: str = "base") -> bool:
         """Verifies if the model files are already downloaded locally.
+
+        Requires that 'model.bin' exists and has valid non-zero content.
 
         Args:
             model_name: Name of the whisper model (e.g. 'tiny', 'base', 'small').
@@ -33,8 +67,13 @@ class ModelManager:
         """
         # 1. Direct path check (e.g. models_dir / "base" / "model.bin")
         direct_path = self.models_dir / model_name
-        if direct_path.is_dir() and (direct_path / "model.bin").exists():
-            return True
+        direct_bin = direct_path / "model.bin"
+        if direct_path.is_dir() and direct_bin.exists():
+            try:
+                if direct_bin.stat().st_size > 0:
+                    return True
+            except OSError:
+                pass
 
         # 2. Faster-whisper snapshot cache check via local_files_only
         try:
@@ -45,7 +84,15 @@ class ModelManager:
                 local_files_only=True,
                 cache_dir=str(self.models_dir),
             )
-            return cached_path is not None and Path(cached_path).exists()
+            if cached_path is not None:
+                model_bin = Path(cached_path) / "model.bin"
+                if model_bin.exists():
+                    try:
+                        if model_bin.stat().st_size > 0:
+                            return True
+                    except OSError:
+                        return True
+            return False
         except Exception:
             return False
 
