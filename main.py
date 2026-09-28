@@ -4,6 +4,7 @@ import sys
 import os
 
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QMessageBox
 
 from app.main_window import MainWindow
@@ -68,6 +69,10 @@ def main() -> int:
     app.setApplicationName("Voice Dictation")
     app.setOrganizationName("DavidCaro")
     app.setQuitOnLastWindowClosed(False)
+
+    icon_path = os.path.join(os.path.dirname(__file__), "assets", "icons", "app_icon.png")
+    if os.path.isfile(icon_path):
+        app.setWindowIcon(QIcon(icon_path))
 
     # Initialize main coordinator
     main_window = MainWindow()
