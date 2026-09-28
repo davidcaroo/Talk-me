@@ -35,16 +35,12 @@ echo [3/3] Compiling Inno Setup installer...
 
 set "ISCC_EXE="
 
-:: Check if ISCC is in PATH
-where iscc >nul 2>nul
-if %errorlevel% equ 0 (
-    set "ISCC_EXE=iscc"
-) else if exist "%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe" (
-    set "ISCC_EXE=%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe"
-) else if exist "%ProgramFiles%\Inno Setup 6\ISCC.exe" (
-    set "ISCC_EXE=%ProgramFiles%\Inno Setup 6\ISCC.exe"
-) else if exist "%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe" (
-    set "ISCC_EXE=%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe"
+if exist "%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe" set "ISCC_EXE=%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe"
+if not defined ISCC_EXE if exist "%ProgramFiles%\Inno Setup 6\ISCC.exe" set "ISCC_EXE=%ProgramFiles%\Inno Setup 6\ISCC.exe"
+if not defined ISCC_EXE if exist "%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe" set "ISCC_EXE=%ProgramFiles(x86)%\Inno Setup 6\ISCC.exe"
+if not defined ISCC_EXE (
+    where iscc >nul 2>nul
+    if not errorlevel 1 set "ISCC_EXE=iscc"
 )
 
 if defined ISCC_EXE (
@@ -56,7 +52,7 @@ if defined ISCC_EXE (
     )
     echo [SUCCESS] Setup installer built in dist\installer\
 ) else (
-    echo [WARNING] Inno Setup 6 (ISCC.exe) was not found in PATH or standard Program Files.
+    echo [WARNING] Inno Setup 6 was not found in standard paths.
     echo If you wish to build the installer setup, please install Inno Setup 6 or add ISCC to PATH.
     echo The standalone binary is ready at: dist\VoiceDictation.exe
 )
