@@ -209,3 +209,25 @@ class TestHotkeyManagerRegistration:
             assert len(triggered) == 1
         finally:
             mgr.cleanup()
+
+    def test_is_hotkey_available(self, temp_config):
+        mgr = HotkeyManager(config_manager=temp_config)
+        try:
+            # Current registered hotkey is considered available to ourselves
+            mgr.register_hotkey("Ctrl+Shift+F8")
+            avail, _ = mgr.is_hotkey_available("Ctrl+Shift+F8")
+            assert avail
+
+            # An invalid hotkey returns False
+            avail, err = mgr.is_hotkey_available("A")
+            assert not avail
+            assert "modificador" in err.lower() or "alfanum" in err.lower()
+
+            # When Win32 register fails, returns False
+            with patch.object(mgr._thread, "register_hotkey", return_value=(False, 1409)):
+                avail, err = mgr.is_hotkey_available("Ctrl+Shift+F9")
+                assert not avail
+                assert "utilizada" in err
+        finally:
+            mgr.cleanup()
+

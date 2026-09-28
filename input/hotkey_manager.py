@@ -510,6 +510,39 @@ class HotkeyManager(QObject):
         """Returns whether a hotkey is currently registered."""
         return self._is_registered
 
+    def is_hotkey_available(self, hotkey_str: str) -> tuple[bool, str]:
+        """
+        Tests if a hotkey combination can be registered without permanently binding it.
+        Returns (is_available, error_message).
+        """
+        is_valid, validation_msg = self.validate_hotkey(hotkey_str)
+        if not is_valid:
+            return False, validation_msg
+
+        normalized = self.normalize_hotkey(hotkey_str)
+        if normalized == self._current_hotkey and self._is_registered:
+            return True, ""
+
+        if sys.platform != "win32":
+            return True, ""
+
+        parts = normalized.split("+")
+        mods = [p for p in parts if p in MODIFIER_ORDER]
+        base_key = [p for p in parts if p not in MODIFIER_ORDER][0]
+
+        mod_flags = _get_modifier_flags(mods)
+        vk_code = _get_vk_code(base_key)
+        if vk_code is None:
+            return False, f"Tecla no reconocida: '{base_key}'."
+
+        temp_id = 0xBEEF
+        success, err_code = self._thread.register_hotkey(temp_id, mod_flags, vk_code)
+        if not success:
+            return False, "Esta combinación ya está siendo utilizada por otra aplicación o por Windows."
+
+        self._thread.unregister_hotkey(temp_id)
+        return True, ""
+
     def cleanup(self) -> None:
         """Stops the worker thread and releases resources."""
         self.unregister_hotkey()
