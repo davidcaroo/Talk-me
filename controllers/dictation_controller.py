@@ -162,6 +162,10 @@ class DictationController(QObject):
         """Handles intermediate status updates from worker."""
         if self._state == AppState.TRANSCRIBING:
             self.status_text_updated.emit(status)
+            if "Descargando" in status:
+                self.subtext_updated.emit("Descarga única del modelo (~75-145MB)...")
+            elif "Transcribiendo" in status:
+                self.subtext_updated.emit("Procesando audio...")
 
     def on_speech_detected(self) -> None:
         """VAD callback: resumes recording state when speech resumes."""

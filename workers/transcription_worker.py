@@ -42,10 +42,16 @@ class TranscriptionWorker(QThread):
     def run(self) -> None:
         """Executes transcription in background thread and emits status / results."""
         try:
-            # Notify preparing status if model needs downloading
+            # Clean any stale locks before starting
+            self.model_manager.clean_stale_locks()
+
+            # Notify download status if model needs downloading
             if not self.model_manager.is_model_cached(self.model_name):
-                logger.info(f"Modelo '{self.model_name}' no cacheado. Notificando preparación...")
-                self.status_changed.emit("Preparando motor de dictado...")
+                logger.info(f"Modelo '{self.model_name}' no cacheado. Descargando...")
+                self.status_changed.emit("Descargando modelo de voz (única vez)...")
+
+            # Ensure model is loaded into memory before starting audio inference
+            self.model_manager.load_model(model_name=self.model_name)
 
             self.status_changed.emit("Transcribiendo...")
             result = self.transcriber.transcribe(
