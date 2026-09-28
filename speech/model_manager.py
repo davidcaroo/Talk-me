@@ -90,12 +90,39 @@ class ModelManager:
                 if model_bin.exists():
                     try:
                         if model_bin.stat().st_size > 0:
+                            self._ensure_direct_model_files(model_name, Path(cached_path))
                             return True
                     except OSError:
                         return True
             return False
         except Exception:
             return False
+
+    def _ensure_direct_model_files(self, model_name: str, snapshot_path: Path) -> Path:
+        """Flattens any symlinked files from snapshot cache into direct, real files.
+
+        Prevents CTranslate2 C++ std::ifstream failure on Windows symbolic links.
+
+        Returns:
+            The direct folder Path.
+        """
+        target_dir = self.models_dir / model_name
+        target_bin = target_dir / "model.bin"
+        if target_dir.is_dir() and target_bin.exists() and not target_bin.is_symlink() and target_bin.stat().st_size > 0:
+            return target_dir
+
+        try:
+            import shutil
+            target_dir.mkdir(parents=True, exist_ok=True)
+            for item in snapshot_path.iterdir():
+                if item.is_file():
+                    target_file = target_dir / item.name
+                    # Copy real content resolving symlinks
+                    shutil.copyfile(item.resolve(), target_file)
+            logger.info(f"Archivos de modelo '{model_name}' consolidados en directorio directo: {target_dir}")
+        except Exception as e:
+            logger.warning(f"No se pudieron consolidar los archivos directos para '{model_name}': {e}")
+        return target_dir
 
     def load_model(
         self,
@@ -125,12 +152,32 @@ class ModelManager:
 
         from faster_whisper import WhisperModel
 
+        # Check if direct folder exists with valid model.bin
+        direct_path = self.models_dir / model_name
+        direct_bin = direct_path / "model.bin"
+        if direct_path.is_dir() and direct_bin.exists() and direct_bin.stat().st_size > 0:
+            model_target = str(direct_path)
+        else:
+            try:
+                from faster_whisper import download_model
+                cached_path = download_model(model_name, cache_dir=str(self.models_dir))
+                if cached_path is not None:
+                    target_dir = self._ensure_direct_model_files(model_name, Path(cached_path))
+                    if (target_dir / "model.bin").exists():
+                        model_target = str(target_dir)
+                    else:
+                        model_target = str(cached_path)
+                else:
+                    model_target = model_name
+            except Exception:
+                model_target = model_name
+
         logger.info(
-            f"Inicializando modelo Whisper '{model_name}' "
+            f"Inicializando modelo Whisper '{model_name}' desde '{model_target}' "
             f"(device={device}, compute_type={compute_type}, cpu_threads={cpu_threads})..."
         )
         model = WhisperModel(
-            model_name,
+            model_target,
             device=device,
             compute_type=compute_type,
             cpu_threads=cpu_threads,

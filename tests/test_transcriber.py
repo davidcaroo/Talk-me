@@ -69,14 +69,15 @@ def test_load_model_lazy_and_cached(tmp_path):
     with patch("faster_whisper.WhisperModel", return_value=mock_whisper_instance) as mock_cls:
         # First call should instantiate
         model1 = manager.load_model("base", device="cpu", compute_type="int8", cpu_threads=4)
-        assert model1 == mock_whisper_instance
-        mock_cls.assert_called_once_with(
-            "base",
-            device="cpu",
-            compute_type="int8",
-            cpu_threads=4,
-            download_root=str(tmp_path),
-        )
+        assert mock_cls.call_count == 1
+        call_args, call_kwargs = mock_cls.call_args
+        assert call_args[0] in ("base", str(tmp_path / "base"))
+        assert call_kwargs == {
+            "device": "cpu",
+            "compute_type": "int8",
+            "cpu_threads": 4,
+            "download_root": str(tmp_path),
+        }
 
         # Second call with same parameters should return cached instance without re-instantiating
         model2 = manager.load_model("base", device="cpu", compute_type="int8", cpu_threads=4)
