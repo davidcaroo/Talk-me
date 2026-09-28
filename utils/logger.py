@@ -56,3 +56,7 @@ def get_logger(name: str = LOGGER_NAME) -> logging.Logger:
     if not logger.handlers:
         return setup_logging(name=name)
     return logger
+
+
+# Alias for compatibility
+setup_logger = setup_logging
