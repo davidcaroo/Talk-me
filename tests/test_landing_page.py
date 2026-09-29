@@ -145,5 +145,18 @@ def test_github_pages_workflow_and_readme_sync():
     assert "https://davidcaroo.github.io/Talk-me/" in readme_content
 
 
+def test_direct_installer_download_and_author_attribution():
+    html_content = (DOCS_DIR / "index.html").read_text(encoding="utf-8")
+    
+    # Direct installer link
+    assert "releases/download/V1.0.0/VoiceDictation-Setup-1.0.0.exe" in html_content
+    assert 'download="VoiceDictation-Setup-1.0.0.exe"' in html_content
+    
+    # LinkedIn author link
+    assert "@Ing.davidcaro" in html_content
+    assert "https://www.linkedin.com/in/ingdavid-caro/" in html_content
+
+
+
 
 

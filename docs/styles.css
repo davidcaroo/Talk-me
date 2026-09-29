@@ -957,6 +957,19 @@ body {
   color: var(--text-tertiary);
 }
 
+.footer-author-link {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.footer-author-link:hover {
+  color: var(--accent-primary-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 /* Accessibility: Screen Reader Only */
 .sr-only {
   position: absolute;
