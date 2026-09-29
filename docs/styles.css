@@ -284,15 +284,57 @@ body {
 .badge-pill {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.95rem;
+  gap: 0.65rem;
+  padding: 0.35rem 1rem 0.35rem 0.45rem;
   border-radius: var(--radius-full);
-  background: var(--accent-soft);
-  color: var(--accent-primary);
-  font-size: 0.8125rem;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  font-weight: 500;
+  margin-bottom: 1.75rem;
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  box-shadow: 0 4px 14px -3px rgba(79, 70, 229, 0.1), 0 2px 6px -2px rgba(15, 23, 42, 0.04);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s var(--ease-spring);
+}
+
+.badge-pill:hover {
+  background: #ffffff;
+  border-color: rgba(79, 70, 229, 0.45);
+  box-shadow: 0 6px 20px -3px rgba(79, 70, 229, 0.18);
+  transform: translateY(-2px);
+}
+
+.badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: var(--accent-gradient);
+  color: #ffffff;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+}
+
+.badge-text {
   font-weight: 600;
-  margin-bottom: 1.5rem;
-  border: 1px solid rgba(79, 70, 229, 0.18);
+  color: var(--text-primary);
+}
+
+.badge-arrow {
+  color: var(--accent-primary);
+  transition: transform 0.2s var(--ease-spring);
+  margin-left: 0.1rem;
+}
+
+.badge-pill:hover .badge-arrow {
+  transform: translateX(3px);
 }
 
 .badge-dot {
