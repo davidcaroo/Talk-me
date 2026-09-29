@@ -116,9 +116,20 @@ def test_accessibility_and_responsive_audit():
     assert "pre-wrap" in css_content
     
     # Responsive breakpoints
+    assert "@media (max-width: 1024px)" in css_content
+    assert "@media (max-width: 992px)" in css_content
     assert "@media (max-width: 768px)" in css_content
     assert "@media (max-width: 480px)" in css_content
-    assert "@media (max-width: 992px)" in css_content
+    assert "@media (max-width: 360px)" in css_content
+    
+    # Overflow-x protection
+    assert "overflow-x: hidden" in css_content
+    assert "min-width: 0" in css_content
+    
+    # Comparison table isolation and mobile swipe hint
+    assert "comparison-hint" in css_content
+    assert "comparison-hint" in html_content
+    assert "-webkit-overflow-scrolling: touch" in css_content
     
     # Touch target accessibility
     assert "44px" in css_content
