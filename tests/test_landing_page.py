@@ -103,3 +103,30 @@ def test_app_js_exists_and_implements_interactive_features():
     assert "prefers-reduced-motion" in content
 
 
+def test_accessibility_and_responsive_audit():
+    css_content = (DOCS_DIR / "styles.css").read_text(encoding="utf-8")
+    html_content = (DOCS_DIR / "index.html").read_text(encoding="utf-8")
+    
+    # Responsive breakpoints
+    assert "@media (max-width: 768px)" in css_content
+    assert "@media (max-width: 480px)" in css_content
+    assert "@media (max-width: 992px)" in css_content
+    
+    # Touch target accessibility
+    assert "44px" in css_content
+    assert "min-height" in css_content
+    
+    # WCAG high contrast text tokens
+    assert "#0f172a" in css_content  # primary text Slate-900
+    assert "#334155" in css_content  # secondary text Slate-700
+    
+    # Screen reader utility
+    assert ".sr-only" in css_content
+    assert 'class="sr-only"' in html_content
+    
+    # Meta viewport tag
+    assert 'name="viewport"' in html_content
+    assert "width=device-width" in html_content
+
+
+
