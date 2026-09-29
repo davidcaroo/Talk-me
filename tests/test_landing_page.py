@@ -99,6 +99,11 @@ def test_app_js_exists_and_implements_interactive_features():
     assert "pointerup" in content or "mouseup" in content
     assert "keydown" in content
     
+    # Real speech recognition & space-preserving text node typing
+    assert "SpeechRecognition" in content
+    assert "createTextNode" in content
+    assert "appendData" in content
+    
     # Accessibility and reduced motion
     assert "prefers-reduced-motion" in content
 
@@ -106,6 +111,9 @@ def test_app_js_exists_and_implements_interactive_features():
 def test_accessibility_and_responsive_audit():
     css_content = (DOCS_DIR / "styles.css").read_text(encoding="utf-8")
     html_content = (DOCS_DIR / "index.html").read_text(encoding="utf-8")
+    
+    # Whitespace preservation in editor
+    assert "pre-wrap" in css_content
     
     # Responsive breakpoints
     assert "@media (max-width: 768px)" in css_content

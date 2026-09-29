@@ -1,6 +1,12 @@
 /**
  * Talk-me — Landing Page Interactive Experience
  * Zero-dependency, lightweight, accessible and high-performance.
+ * Features:
+ * - Real Microphone SpeechRecognition (Web Speech API) with graceful fallback
+ * - Real-time Audio Reactive Canvas Waveform (Web Audio API)
+ * - Safe Whitespace Typewriter (document.createTextNode + appendData)
+ * - 3D Card Hover Perspective
+ * - Accessible FAQ Accordion
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const canvas = document.getElementById('waveformCanvas');
   const ctx = canvas ? canvas.getContext('2d') : null;
 
-  let animationFrameId = null;
   let wavePhase = 0;
   let currentAmplitude = 0.15; // idle amplitude
   let targetAmplitude = 0.15;
@@ -39,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.clearRect(0, 0, width, height);
 
     // Smoothly interpolate amplitude
-    currentAmplitude += (targetAmplitude - currentAmplitude) * 0.1;
+    currentAmplitude += (targetAmplitude - currentAmplitude) * 0.12;
 
     // Draw multi-layered sine waves
     const layers = [
@@ -71,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!prefersReducedMotion) {
       wavePhase += 1;
-      animationFrameId = requestAnimationFrame(drawWaveform);
+      requestAnimationFrame(drawWaveform);
     }
   }
 
@@ -80,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // -------------------------------------------------------------
-  // 2. Interactive Voice Dictation Simulator
+  // 2. Interactive Voice Dictation Simulator (Real Mic + Fallback)
   // -------------------------------------------------------------
   const micButton = document.getElementById('micButton');
   const statusBadge = document.getElementById('statusBadge');
@@ -92,36 +97,124 @@ document.addEventListener('DOMContentLoaded', () => {
   let isProcessing = false;
   let typeInterval = null;
 
+  // Real Speech Recognition Support (Web Speech API)
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let liveTranscript = '';
+  let recognitionActive = false;
+
+  // Real Audio Level Analyser via getUserMedia
+  let audioContext = null;
+  let analyser = null;
+  let micAudioInitialized = false;
+
+  async function tryInitAudioAnalyser() {
+    if (micAudioInitialized || !navigator.mediaDevices?.getUserMedia) return;
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const source = audioContext.createMediaStreamSource(stream);
+      analyser = audioContext.createAnalyser();
+      analyser.fftSize = 64;
+      source.connect(analyser);
+      micAudioInitialized = true;
+
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      function trackMicVolume() {
+        if (isRecording && analyser) {
+          analyser.getByteFrequencyData(dataArray);
+          let sum = 0;
+          for (let i = 0; i < dataArray.length; i++) {
+            sum += dataArray[i];
+          }
+          const avg = sum / dataArray.length;
+          // React smoothly to real voice volume
+          targetAmplitude = Math.max(0.35, Math.min(1.4, (avg / 100) * 1.2));
+        }
+        requestAnimationFrame(trackMicVolume);
+      }
+      trackMicVolume();
+    } catch (e) {
+      // User dismissed microphone prompt or device not present; fallback to synthetic pulse
+      micAudioInitialized = true;
+    }
+  }
+
+  if (SpeechRecognition) {
+    try {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'es-ES';
+      recognition.continuous = true;
+      recognition.interimResults = true;
+
+      recognition.onresult = (event) => {
+        let interim = '';
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          if (event.results[i].isFinal) {
+            liveTranscript += event.results[i][0].transcript + ' ';
+          } else {
+            interim += event.results[i][0].transcript;
+          }
+        }
+        const currentSpoken = (liveTranscript + interim).trim();
+        if (currentSpoken && statusBadge) {
+          const preview = currentSpoken.length > 28 ? '...' + currentSpoken.slice(-28) : currentSpoken;
+          statusBadge.textContent = `● Escuchando: "${preview}"`;
+        }
+      };
+
+      recognition.onerror = () => {
+        // Silently handled; stopRecording will fallback cleanly
+      };
+
+      recognition.onend = () => {
+        recognitionActive = false;
+      };
+    } catch (e) {
+      recognition = null;
+    }
+  }
+
   const samplePhrases = [
     "Hola, estoy redactando este documento usando Talk-me. La velocidad y precisión de Whisper local es increíble.",
-    "Estimado cliente, adjunto la propuesta técnica revisada para su aprobación.",
-    "Función async que procesa el flujo de audio y lo envía al modelo CTranslate2.",
+    "Estimado equipo, los resultados del último sprint superaron las expectativas en un 40%.",
+    "Función asíncrona que procesa el flujo de audio y lo envía al modelo CTranslate2 sin latencia de red.",
     "El dictado offline garantiza que nuestras notas confidenciales jamás salgan del equipo."
   ];
   let phraseIndex = 0;
-  let currentDictationText = samplePhrases[0];
+  let customPresetText = null;
 
-  function startRecording(customText) {
+  function startRecording(presetText) {
     if (isRecording || isProcessing) return;
     isRecording = true;
+    liveTranscript = '';
+    customPresetText = presetText || null;
 
-    if (customText) {
-      currentDictationText = customText;
-    } else {
-      currentDictationText = samplePhrases[phraseIndex % samplePhrases.length];
-      phraseIndex++;
+    // Try connecting real mic audio for live waveform reaction
+    if (!micAudioInitialized) {
+      tryInitAudioAnalyser();
+    }
+
+    // Start native Web Speech API if no fixed preset text
+    if (!presetText && recognition && !recognitionActive) {
+      try {
+        recognition.start();
+        recognitionActive = true;
+      } catch (e) {
+        recognitionActive = false;
+      }
     }
 
     // Update UI state
     micButton.classList.add('recording');
     statusBadge.className = 'status-indicator recording';
     statusBadge.textContent = '● Grabando audio...';
-    targetAmplitude = 0.95; // Vibrant waveform activity
+    targetAmplitude = 0.95; // Default reactive amplitude
 
     // Clear placeholder text if first time
     const placeholder = demoOutput.querySelector('.placeholder-text');
     if (placeholder) {
-      demoOutput.textContent = '';
+      demoOutput.innerHTML = '';
     }
   }
 
@@ -129,6 +222,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isRecording) return;
     isRecording = false;
     isProcessing = true;
+
+    // Stop speech recognition
+    if (recognition && recognitionActive) {
+      try {
+        recognition.stop();
+      } catch (e) {}
+      recognitionActive = false;
+    }
 
     // Transition to processing state
     micButton.classList.remove('recording');
@@ -143,22 +244,48 @@ document.addEventListener('DOMContentLoaded', () => {
       statusBadge.className = 'status-indicator ready';
       statusBadge.textContent = 'Listo para dictar';
 
-      typeWriterOutput(currentDictationText);
-    }, 420);
+      // Decide what text to write:
+      // 1. If user spoke real words into their mic, use their REAL voice transcript!
+      // 2. If a preset button was clicked, use the preset text.
+      // 3. Fallback to smart rotating sample phrases.
+      let finalText = '';
+      if (liveTranscript && liveTranscript.trim().length > 0) {
+        finalText = liveTranscript.trim();
+      } else if (customPresetText) {
+        finalText = customPresetText;
+      } else {
+        finalText = samplePhrases[phraseIndex % samplePhrases.length];
+        phraseIndex++;
+      }
+
+      typeWriterOutput(finalText);
+    }, 400);
   }
 
+  /**
+   * Safe Typewriter effect that preserves all spaces, tabs and newlines
+   * using DOM TextNode appendData rather than innerText.
+   */
   function typeWriterOutput(text) {
     if (typeInterval) clearInterval(typeInterval);
 
-    // If editor has existing content, append a space
-    if (demoOutput.innerText.trim().length > 0 && !demoOutput.querySelector('.placeholder-text')) {
-      demoOutput.innerText += ' ';
+    // Remove placeholder if present
+    const placeholder = demoOutput.querySelector('.placeholder-text');
+    if (placeholder) {
+      demoOutput.innerHTML = '';
+    } else if (demoOutput.textContent.trim().length > 0) {
+      // Append a separating space for consecutive dictations
+      demoOutput.appendChild(document.createTextNode(' '));
     }
+
+    // Create a new TextNode to stream characters into
+    const textNode = document.createTextNode('');
+    demoOutput.appendChild(textNode);
 
     let i = 0;
     typeInterval = setInterval(() => {
       if (i < text.length) {
-        demoOutput.innerText += text.charAt(i);
+        textNode.appendData(text.charAt(i));
         i++;
         // Keep scroll at bottom
         demoOutput.scrollTop = demoOutput.scrollHeight;
@@ -171,7 +298,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Pointer events on Mic Button (supports both press-and-hold and click toggle)
   if (micButton) {
-    let pressTimer = null;
     let isHolding = false;
 
     micButton.addEventListener('pointerdown', (e) => {
@@ -190,7 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Keyboard Spacebar Hold to Dictate when simulator is active
     window.addEventListener('keydown', (e) => {
       if (e.code === 'Space' && !e.repeat && document.activeElement !== demoOutput && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
-        // Prevent page scroll on spacebar when testing dictation
         e.preventDefault();
         startRecording();
       }

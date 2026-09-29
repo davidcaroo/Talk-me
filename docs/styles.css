@@ -559,6 +559,8 @@ body {
   font-size: 1.1rem;
   line-height: 1.7;
   color: var(--text-primary);
+  white-space: pre-wrap;
+  word-break: break-word;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
