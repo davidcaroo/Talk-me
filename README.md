@@ -1,10 +1,18 @@
 # Voice Dictation (Talk-me) 🎙️✨
 
-**Voice Dictation** es una utilidad de escritorio nativa para Windows (10/11) desarrollada con Python y PySide6. Permite activar el micrófono mediante una combinación de teclas global configurable, dictar texto, transcribirlo localmente con `faster-whisper` (100% privado y sin conexión a la nube) y pegar el resultado automáticamente en la aplicación activa.
+[![Landing Page](https://img.shields.io/badge/Sitio_Web-Talk--me_Landing_Page-4f46e5?style=for-the-badge&logo=googlechrome&logoColor=white)](https://davidcaroo.github.io/Talk-me/)
+[![GitHub Release](https://img.shields.io/badge/Windows-v1.0.0_Setup-06b6d4?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/davidcaroo/Talk-me/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-10b981?style=for-the-badge)](LICENSE)
+
+> 🌐 **Visita la Landing Page Oficial con Simulador Interactivo:**  
+> 👉 **[https://davidcaroo.github.io/Talk-me/](https://davidcaroo.github.io/Talk-me/)**
+
+**Voice Dictation (Talk-me)** es una utilidad de escritorio nativa para Windows (10/11) desarrollada con Python y PySide6. Permite activar el micrófono mediante una combinación de teclas global configurable, dictar texto, transcribirlo localmente con `faster-whisper` (100% privado y sin conexión a la nube) y pegar el resultado automáticamente en la aplicación activa.
 
 Desarrollado por **David Caro** ([@ing.davidcaro](https://github.com/davidcaroo)).
 
 ---
+
 
 ## 🌟 Características Principales
 

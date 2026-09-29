@@ -129,4 +129,21 @@ def test_accessibility_and_responsive_audit():
     assert "width=device-width" in html_content
 
 
+def test_github_pages_workflow_and_readme_sync():
+    root_dir = DOCS_DIR.parent
+    workflow_path = root_dir / ".github" / "workflows" / "deploy-pages.yml"
+    readme_path = root_dir / "README.md"
+    
+    assert workflow_path.exists(), ".github/workflows/deploy-pages.yml must exist"
+    workflow_content = workflow_path.read_text(encoding="utf-8")
+    assert "actions/deploy-pages" in workflow_content
+    assert "docs" in workflow_content
+    assert "main" in workflow_content
+    
+    assert readme_path.exists(), "README.md must exist"
+    readme_content = readme_path.read_text(encoding="utf-8")
+    assert "https://davidcaroo.github.io/Talk-me/" in readme_content
+
+
+
 
