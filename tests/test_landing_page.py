@@ -157,6 +157,24 @@ def test_direct_installer_download_and_author_attribution():
     assert "https://www.linkedin.com/in/ingdavid-caro/" in html_content
 
 
+def test_mit_license_file_and_readme_section():
+    root_dir = DOCS_DIR.parent
+    license_path = root_dir / "LICENSE"
+    readme_path = root_dir / "README.md"
+    
+    assert license_path.exists(), "LICENSE file must exist in root"
+    license_content = license_path.read_text(encoding="utf-8")
+    assert "MIT License" in license_content
+    assert "David Caro" in license_content
+    assert "@Ing.davidcaro" in license_content
+    
+    readme_content = readme_path.read_text(encoding="utf-8")
+    assert "## 📄 Licencia" in readme_content
+    assert "Licencia MIT" in readme_content
+    assert "https://www.linkedin.com/in/ingdavid-caro/" in readme_content
+
+
+
 
 
 
