@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="talkme-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5" />
+      <stop offset="50%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+    <linearGradient id="glow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.6" />
+    </linearGradient>
+    <filter id="soft-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#4f46e5" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- Squircle Base -->
+  <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#talkme-grad)" filter="url(#soft-shadow)" />
+
+  <!-- Inner Subtle Border -->
+  <rect x="3" y="3" width="58" height="58" rx="15" stroke="#ffffff" stroke-opacity="0.25" stroke-width="1.5" />
+
+  <!-- Modern Microphone Capsule -->
+  <rect x="26" y="15" width="12" height="22" rx="6" fill="url(#glow-grad)" />
+
+  <!-- Microphone Arc -->
+  <path d="M20 28C20 34.6274 25.3726 40 32 40C38.6274 40 44 34.6274 44 28" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+
+  <!-- Base Stem -->
+  <line x1="32" y1="40" x2="32" y2="48" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+  <line x1="24" y1="48" x2="40" y2="48" stroke="#ffffff" stroke-width="3" stroke-linecap="round" />
+
+  <!-- Dynamic Soundwaves -->
+  <path d="M14 26C14 24 14 32 14 30" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.8" />
+  <path d="M50 26C50 24 50 32 50 30" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.8" />
+  <path d="M9 28C9 27 9 29 9 28" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.5" />
+  <path d="M55 28C55 27 55 29 55 28" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.5" />
+</svg>

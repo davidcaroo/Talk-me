@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Talk-me: Dictado de voz inteligente para Windows con Whisper IA local. 100% offline, privado, rápido y compatible con cualquier aplicación.">
+  <meta name="theme-color" content="#f8fafc">
+  <title>Talk-me — Dictado por Voz Inteligente y Offline para Windows</title>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Talk-me — Dictado por Voz Inteligente para Windows">
+  <meta property="og:description" content="Dicta a la velocidad de tus pensamientos. Whisper IA local, sin nube, 100% privado y con inserción en cualquier app.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/logo.svg">
+
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Background Decorative Ambient Blobs -->
+  <div class="blob-ambient blob-1" aria-hidden="true"></div>
+  <div class="blob-ambient blob-2" aria-hidden="true"></div>
+
+  <!-- Header / Navigation -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="#hero" class="brand" aria-label="Talk-me Inicio">
+        <img src="assets/logo.svg" alt="Talk-me Logo" class="brand-logo" width="40" height="40">
+        <span class="brand-name">Talk-me</span>
+      </a>
+
+      <nav class="nav-menu" aria-label="Navegación principal">
+        <a href="#simulator" class="nav-link">Simulador</a>
+        <a href="#features" class="nav-link">Características</a>
+        <a href="#comparison" class="nav-link">Comparativa</a>
+        <a href="#faq" class="nav-link">Preguntas</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="https://github.com/davidcaroo/Talk-me" target="_blank" rel="noopener noreferrer" class="btn btn-secondary nav-github-btn" aria-label="Repositorio de GitHub">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <a href="#download" class="btn btn-primary">
+          <span>Descargar Gratis</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+      <div class="hero-content">
+        <div class="badge-pill">
+          <span class="badge-dot"></span>
+          <span>Talk-me v1.0.0 Oficial • Windows 10/11</span>
+        </div>
+
+        <h1 class="hero-title">
+          Dicta a la velocidad de <br>
+          <span class="text-gradient">tus pensamientos.</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Escribe correos, documentos, código y mensajes hablando con total fluidez.
+          Impulsado por <strong>Whisper IA local</strong>: sin servidores, sin suscripciones y con inserción automática en cualquier aplicación de Windows.
+        </p>
+
+        <div class="hero-cta-group">
+          <a href="#download" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.95-1.8"/>
+            </svg>
+            <span>Descargar para Windows</span>
+          </a>
+          <a href="#simulator" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span>Probar Simulador</span>
+          </a>
+        </div>
+
+        <!-- Metrics Strip -->
+        <div class="metrics-strip">
+          <div class="metric-card">
+            <div class="metric-value">&lt; 0.5s</div>
+            <div class="metric-label">Latencia de dictado</div>
+          </div>
+          <div class="metric-divider" aria-hidden="true"></div>
+          <div class="metric-card">
+            <div class="metric-value">100%</div>
+            <div class="metric-label">Offline y Privado</div>
+          </div>
+          <div class="metric-divider" aria-hidden="true"></div>
+          <div class="metric-card">
+            <div class="metric-value">0$</div>
+            <div class="metric-label">Sin suscripciones</div>
+          </div>
+          <div class="metric-divider" aria-hidden="true"></div>
+          <div class="metric-card">
+            <div class="metric-value">Global</div>
+            <div class="metric-label">Funciona en cualquier app</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Simulator Section -->
+    <section id="simulator" class="simulator-section">
+      <div class="section-header">
+        <span class="section-tag">Demostración en Vivo</span>
+        <h2 class="section-title">Experimenta la fluidez en tu navegador</h2>
+        <p class="section-description">
+          Interactúa con el simulador de Talk-me. Mantén presionado el micrófono para ver la detección de voz, la forma de onda en tiempo real y la inserción de texto.
+        </p>
+      </div>
+
+      <div class="simulator-card glass-card">
+        <!-- Simulator Window Header -->
+        <div class="simulator-toolbar">
+          <div class="window-dots" aria-hidden="true">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="simulator-title">Talk-me Live Playground — Inserción en tiempo real</div>
+          <div class="simulator-actions">
+            <span id="statusBadge" class="status-indicator ready">Listo para dictar</span>
+          </div>
+        </div>
+
+        <!-- Canvas Audio Waveform -->
+        <div class="waveform-container">
+          <canvas id="waveformCanvas" width="700" height="90" aria-label="Visualizador de forma de onda de audio"></canvas>
+        </div>
+
+        <!-- Mock Text Editor Output -->
+        <div class="editor-container">
+          <label for="demoOutput" class="sr-only">Editor de texto de demostración</label>
+          <div id="demoOutput" class="demo-editor" contenteditable="true" spellcheck="false" role="textbox" aria-multiline="true">
+            <span class="placeholder-text">Presiona y mantén presionado el botón del micrófono abajo para iniciar el dictado...</span>
+          </div>
+        </div>
+
+        <!-- Simulator Bottom Controls -->
+        <div class="simulator-controls">
+          <div class="preset-pills">
+            <span class="preset-label">Ejemplos:</span>
+            <button type="button" class="preset-btn" data-text="Estimado equipo, los resultados del último sprint superaron las expectativas en un 40%.">📧 Correo de negocios</button>
+            <button type="button" class="preset-btn" data-text="// Refactorizar el gestor de eventos para reducir la latencia de entrada a menos de 5ms.">💻 Código & Docs</button>
+            <button type="button" class="preset-btn" data-text="Conclusiones principales: 1. Automatizar el despliegue. 2. Implementar pruebas continuas. 3. Lanzar la versión preliminar el viernes.">📝 Minuta de reunión</button>
+          </div>
+
+          <div class="mic-action-box">
+            <button id="micButton" type="button" class="mic-button" aria-label="Mantener presionado para dictar">
+              <svg class="mic-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+            </button>
+            <div class="mic-helper-text">
+              <strong>Mantén presionado</strong> o haz clic para dictar
+              <span class="keyboard-tip">(o usa la barra espaciadora)</span>
+            </div>
+            <button id="clearDemoBtn" type="button" class="btn-text" title="Limpiar texto">Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bento Grid Features Section -->
+    <section id="features" class="features-section">
+      <div class="section-header">
+        <span class="section-tag">Ventajas y Rendimiento</span>
+        <h2 class="section-title">Diseñado para la máxima productividad</h2>
+        <p class="section-description">
+          A diferencia de herramientas en la nube que agregan retrasos y cobran por cada minuto transcrito, Talk-me funciona 100% en tu equipo.
+        </p>
+      </div>
+
+      <div class="bento-grid">
+        <!-- Card 1 (Large) -->
+        <div class="bento-card bento-card-large glass-card">
+          <div class="bento-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <h3 class="bento-title">Whisper IA Local de Alta Velocidad</h3>
+          <p class="bento-description">
+            Implementado sobre el motor ultrarrápido CTranslate2. El modelo se mantiene precalentado en memoria RAM para procesar el audio y escribir el texto en menos de medio segundo.
+          </p>
+          <div class="bento-badge">Latencia &lt; 0.5s</div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bento-card glass-card">
+          <div class="bento-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </div>
+          <h3 class="bento-title">Privacidad Absoluta</h3>
+          <p class="bento-description">
+            Cero telemetría, cero envío de grabaciones y cero fugas de datos. Tus documentos confidenciales nunca tocan un servidor externo.
+          </p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bento-card glass-card">
+          <div class="bento-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+          </div>
+          <h3 class="bento-title">Inserción Universal</h3>
+          <p class="bento-description">
+            Compatible con VS Code, Word, Excel, WhatsApp Web, Slack, Notion, navegadores y cualquier entrada de texto de Windows.
+          </p>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="bento-card glass-card">
+          <div class="bento-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 14 14"></polyline>
+            </svg>
+          </div>
+          <h3 class="bento-title">Cero Consumo en Reposo</h3>
+          <p class="bento-description">
+            Cuando no estás dictando, Talk-me duerme en segundo plano con 0% de uso de CPU, listo para despertar en milisegundos con tu atajo global.
+          </p>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="bento-card glass-card">
+          <div class="bento-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <h3 class="bento-title">Puntuación Contextual</h3>
+          <p class="bento-description">
+            Añade mayúsculas automáticas, puntos y comas según la entonación y estructura de la oración de forma natural.
+          </p>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="bento-card glass-card">
+          <div class="bento-icon-wrapper">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
+          <h3 class="bento-title">Instalador en 1 Clic</h3>
+          <p class="bento-description">
+            Paquete autónomo con instalador Inno Setup nativo para Windows. Sin necesidad de instalar Python, Git ni bibliotecas adicionales.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Section -->
+    <section id="comparison" class="comparison-section">
+      <div class="section-header">
+        <span class="section-tag">Análisis Comparativo</span>
+        <h2 class="section-title">¿Por qué Talk-me supera a las alternativas?</h2>
+        <p class="section-description">
+          Compara el rendimiento y la seguridad de Talk-me frente al dictado estándar del sistema operativo y los servicios basados en la nube.
+        </p>
+      </div>
+
+      <div class="comparison-table-wrapper glass-card">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th scope="col" class="feature-col">Característica</th>
+              <th scope="col" class="highlight-col">
+                <span class="table-brand">Talk-me</span>
+                <span class="table-badge">Recomendado</span>
+              </th>
+              <th scope="col">Dictado Nativo Windows</th>
+              <th scope="col">Herramientas Cloud (Dragon/Otter)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Privacidad de datos</th>
+              <td class="highlight-cell"><span class="check-icon">✓</span> 100% en tu PC</td>
+              <td><span class="warn-icon">⚠</span> Telemetría de voz</td>
+              <td><span class="cross-icon">✕</span> Audio en servidores cloud</td>
+            </tr>
+            <tr>
+              <th scope="row">Funciona sin Internet</th>
+              <td class="highlight-cell"><span class="check-icon">✓</span> Sí, totalmente offline</td>
+              <td><span class="cross-icon">✕</span> Requiere conexión constante</td>
+              <td><span class="cross-icon">✕</span> Requiere conexión</td>
+            </tr>
+            <tr>
+              <th scope="row">Latencia de transcripción</th>
+              <td class="highlight-cell"><span class="check-icon">✓</span> &lt; 0.5s local</td>
+              <td><span class="warn-icon">~</span> 1.5s - 3s</td>
+              <td><span class="cross-icon">✕</span> 2s - 5s de retardo</td>
+            </tr>
+            <tr>
+              <th scope="row">Precisión y Puntuación IA</th>
+              <td class="highlight-cell"><span class="check-icon">✓</span> Modelo Whisper OpenAI</td>
+              <td><span class="warn-icon">~</span> Básico</td>
+              <td><span class="check-icon">✓</span> Alto (con costo extra)</td>
+            </tr>
+            <tr>
+              <th scope="row">Precio y Licencia</th>
+              <td class="highlight-cell"><span class="check-icon">✓</span> 100% Gratis / Open Source</td>
+              <td><span class="check-icon">✓</span> Incluido</td>
+              <td><span class="cross-icon">✕</span> $15 - $30 / mes</td>
+            </tr>
+            <tr>
+              <th scope="row">Compatibilidad con cualquier ventana</th>
+              <td class="highlight-cell"><span class="check-icon">✓</span> Universal con hotkey</td>
+              <td><span class="warn-icon">~</span> A veces pierde el foco</td>
+              <td><span class="cross-icon">✕</span> Requiere extensiones</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- FAQ Accordion Section -->
+    <section id="faq" class="faq-section">
+      <div class="section-header">
+        <span class="section-tag">Resolviendo Dudas</span>
+        <h2 class="section-title">Preguntas Frecuentes</h2>
+        <p class="section-description">
+          Todo lo que necesitas saber sobre el funcionamiento, requerimientos y seguridad de Talk-me.
+        </p>
+      </div>
+
+      <div class="faq-container">
+        <details class="faq-item glass-card" open>
+          <summary class="faq-question">
+            <span>¿Requiere conexión a Internet para transcribir?</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>
+              No, en absoluto. Todo el procesamiento de audio e inferencia del modelo Whisper se ejecuta localmente en el hardware de tu ordenador. Puedes dictar en un avión, sin cobertura o en una red corporativa aislada sin ningún inconveniente.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item glass-card">
+          <summary class="faq-question">
+            <span>¿Cómo se activa mientras trabajo en otra aplicación?</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>
+              Talk-me cuenta con un atajo global de teclado (por defecto <code>Alt + Espacio</code> o tu combinación preferida). Simplemente presiona el atajo, habla con normalidad y, al soltarlo o presionar enter, el texto transcrito se escribirá instantáneamente en el cursor donde estabas escribiendo.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item glass-card">
+          <summary class="faq-question">
+            <span>¿Cuáles son los requisitos mínimos del sistema?</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>
+              Cualquier equipo con <strong>Windows 10 o Windows 11 de 64 bits</strong>, 4 GB de memoria RAM (8 GB recomendados) y procesador Intel/AMD multinúcleo o gráficos dedicados. El instalador autónomo incluye todas las dependencias necesarias.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item glass-card">
+          <summary class="faq-question">
+            <span>¿Es seguro para información médica, legal o empresarial?</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>
+              Sí, es el método más seguro posible. Al no comunicarse con ninguna API externa, no existe riesgo de interceptación ni almacenamiento en servidores de terceros. Cumple con los más estrictos criterios de privacidad y secreto profesional.
+            </p>
+          </div>
+        </details>
+
+        <details class="faq-item glass-card">
+          <summary class="faq-question">
+            <span>¿Puedo dictar en otros idiomas además del español?</span>
+            <svg class="faq-chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </summary>
+          <div class="faq-answer">
+            <p>
+              Sí. Gracias a la arquitectura multilingüe de Whisper, Talk-me soporta más de 90 idiomas incluyendo Español, Inglés, Portugués, Francés, Alemán e Italiano con detección automática o fijación de idioma en ajustes.
+            </p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="download-section">
+      <div class="download-card glass-card">
+        <div class="download-content">
+          <span class="badge-pill">Instalación Rápida • Versión 1.0.0</span>
+          <h2 class="download-title">Comienza a dictar en Windows hoy mismo</h2>
+          <p class="download-description">
+            Descarga el instalador oficial, configúralo en menos de 2 minutos y multiplica tu velocidad de escritura sin costo alguno.
+          </p>
+
+          <div class="download-buttons">
+            <a href="https://github.com/davidcaroo/Talk-me/releases/latest" class="btn btn-primary btn-lg download-btn" download>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              <span>Descargar VoiceDictation-Setup-1.0.0.exe</span>
+            </a>
+            <a href="https://github.com/davidcaroo/Talk-me" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/>
+              </svg>
+              <span>Ver en GitHub</span>
+            </a>
+          </div>
+
+          <div class="download-specs">
+            <span>✓ Windows 10 / 11 (64-bit)</span>
+            <span>•</span>
+            <span>✓ Licencia MIT Libre</span>
+            <span>•</span>
+            <span>✓ Instalación Limpia y Segura</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="#hero" class="brand" aria-label="Talk-me Inicio">
+          <img src="assets/logo.svg" alt="Talk-me Logo" class="brand-logo" width="32" height="32">
+          <span class="brand-name">Talk-me</span>
+        </a>
+        <p class="footer-tagline">Dictado inteligente, offline y privado para Windows.</p>
+      </div>
+
+      <div class="footer-links">
+        <a href="#simulator">Simulador</a>
+        <a href="#features">Características</a>
+        <a href="#comparison">Comparativa</a>
+        <a href="#faq">Preguntas</a>
+        <a href="https://github.com/davidcaroo/Talk-me" target="_blank" rel="noopener noreferrer">Código Fuente</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 Talk-me Project. Liberado bajo licencia MIT.</p>
+      <p class="footer-credits">Hecho con pasión por la productividad y el software privado.</p>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
