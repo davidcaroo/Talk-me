@@ -78,3 +78,28 @@ def test_index_html_semantic_structure_and_sections():
     assert "Talk-me" in content
     assert "VoiceDictation-Setup" in content or "releases" in content
 
+
+def test_app_js_exists_and_implements_interactive_features():
+    app_js_path = DOCS_DIR / "app.js"
+    assert app_js_path.exists(), "docs/app.js must exist"
+    
+    content = app_js_path.read_text(encoding="utf-8")
+    
+    # Waveform canvas rendering
+    assert "getContext" in content
+    assert "requestAnimationFrame" in content
+    
+    # State handling & audio simulation
+    assert "recording" in content
+    assert "processing" in content
+    assert "statusBadge" in content
+    
+    # Event listeners
+    assert "pointerdown" in content or "mousedown" in content
+    assert "pointerup" in content or "mouseup" in content
+    assert "keydown" in content
+    
+    # Accessibility and reduced motion
+    assert "prefers-reduced-motion" in content
+
+
